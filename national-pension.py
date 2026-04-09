@@ -73,7 +73,7 @@ class PensionData():
 
 @ st.cache_data
 def read_pensiondata():
-    data = PensionData('"C:\workspace\Streamlit\data\national-pension.csv"')
+    data = PensionData('https://drive.google.com/file/d/1ONxMqmBF27qEtYHXeQd1m82oK2Ru7lMm/view?usp=drive_link')
     return data
 
 data = read_pensiondata()
