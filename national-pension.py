@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import re
 import streamlit as st
+imoport requests
 
 # 한글 폰트 설정
 # plt.rcParams['font.family'] = "AppleGothic"
