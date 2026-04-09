@@ -71,10 +71,31 @@ class PensionData():
     def get_data(self):
         return self.df
 
-@ st.cache_data
+@st.cache_data
 def read_pensiondata():
-    data = PensionData('https://drive.google.com/file/d/1ONxMqmBF27qEtYHXeQd1m82oK2Ru7lMm/view?usp=drive_link')
-    return data
+    # 1. 파일 저장 경로 설정
+    data_dir = './data'
+    file_path = os.path.join(data_dir, 'national-pension.csv')
+    
+    if not os.path.exists(data_dir):
+        os.makedirs(data_dir)
+
+    # 2. 구글 드라이브 파일 다운로드 로직 (제공해주신 ID 적용)
+    if not os.path.exists(file_path):
+        file_id = '1ONxMqmBF27qEtYHXeQd1m82oK2Ru7lMm'
+        direct_url = f'https://drive.google.com/uc?export=download&id={file_id}'
+        
+        with st.spinner('구글 드라이브에서 대용량 데이터를 불러오는 중... (최초 1회)'):
+            try:
+                response = requests.get(direct_url)
+                response.raise_for_status()
+                with open(file_path, 'wb') as f:
+                    f.write(response.content)
+            except Exception as e:
+                st.error(f"데이터 다운로드 중 에러 발생: {e}")
+                return None
+    
+    return PensionData(file_path)
 
 data = read_pensiondata()
 company_name = st.text_input('회사명을 입력해 주세요', placeholder='검색할 회사명 입력')
