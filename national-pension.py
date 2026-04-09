@@ -14,8 +14,8 @@ plt.rcParams['font.family'] = "NanumGothic"
 plt.rcParams['axes.unicode_minus'] = False
 
 class PensionData():
-    def __init__(self, filepath):
-        self.df = pd.read_csv(os.path.join(filepath), encoding='cp949')
+    def __init__(self, df):
+        self.df = df.copy()
         self.pattern1 = '(\([^)]+\))'
         self.pattern2 = '(\[[^)]+\])'
         self.pattern3 = '[^A-Za-z0-9가-힣]'
@@ -71,10 +71,14 @@ class PensionData():
     def get_data(self):
         return self.df
 
-@ st.cache_data
+@st.cache_data
 def read_pensiondata():
-    data = PensionData('./data/national-pension.csv')
-    return data
+    url = "https://github.com/jinwoodkim-git/asia_econ_boot/releases/download/data/national-pension.csv"
+    df = pd.read_csv(url, encoding="cp949")
+    return df
+
+raw_df = read_pensiondata()
+data = PensionData(raw_df)
 
 data = read_pensiondata()
 company_name = st.text_input('회사명을 입력해 주세요', placeholder='검색할 회사명 입력')
